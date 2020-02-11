@@ -113,10 +113,28 @@ const deleteCommodityById = (id) => {
   })
 }
 
+const queryCommodityById = (id) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT * FROM commodity WHERE `id`=?;'
+    const values = [id]
+    pool.getConnection((err, con) => {
+      if (err) reject(err)
+      else {
+        con.query(sql, values, (err, rows) => {
+          if (err) reject(err)
+          else resolve(rows)
+        })
+      }
+      con.release()
+    })
+  })
+}
+
 module.exports = {
   addCommodity,
   queryCommodityByConditionsAndPage,
   queryCountByConditions,
   modifyCommodityById,
-  deleteCommodityById
+  deleteCommodityById,
+  queryCommodityById
 }
