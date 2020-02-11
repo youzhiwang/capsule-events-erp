@@ -53,9 +53,21 @@ const deleteBrandById = (id) => {
   })
 }
 
+const queryAllBrand = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const rows = await brandModel.queryAllBrand()
+      resolve(rows)
+    } catch (e) {
+      reject(e)
+    }
+  })
+}
+
 module.exports = {
   getBrandListByPage,
   insertBrand,
   updateBrandById,
-  deleteBrandById
+  deleteBrandById,
+  queryAllBrand
 }

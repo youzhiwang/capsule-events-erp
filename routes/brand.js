@@ -73,4 +73,21 @@ router.del('/brand/:id', async (ctx, next) => {
   }
 })
 
+router.get('/brand-dic', async (ctx, next) => {
+  try{
+    const data = await brandService.queryAllBrand()
+    ctx.body = {
+      code: 'success',
+      data,
+      message: ''
+    }
+  }catch (e) {
+    ctx.body = {
+      code: 'fail',
+      data: '',
+      message: e
+    }
+  }
+})
+
 module.exports = router

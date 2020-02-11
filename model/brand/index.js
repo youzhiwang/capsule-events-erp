@@ -84,10 +84,27 @@ const deleteBrandById = (id) => {
   })
 }
 
+const queryAllBrand = () => {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT `id`, `brand_name` FROM brand ORDER BY `id`;'
+    pool.getConnection((err, con) => {
+      if (err) reject(err)
+      else {
+        con.query(sql, (err, rows) => {
+          if (err) reject(err)
+          else resolve(rows)
+        })
+      }
+      con.release()
+    })
+  })
+}
+
 module.exports = {
   queryBrandByPage,
   queryBrandCount,
   insertBrand,
   updateBrandById,
-  deleteBrandById
+  deleteBrandById,
+  queryAllBrand
 }
