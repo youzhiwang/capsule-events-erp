@@ -10,6 +10,7 @@ const brand = require('./routes/brand')
 const subclass = require('./routes/subclass')
 const commodity = require('./routes/commodity')
 const activityPrice = require('./routes/activityPrice')
+const cost = require('./routes/cost')
 
 // error handler
 onerror(app)
@@ -36,6 +37,7 @@ app.use(brand.routes(), brand.allowedMethods())
 app.use(subclass.routes(), subclass.allowedMethods())
 app.use(commodity.routes(), commodity.allowedMethods())
 app.use(activityPrice.routes(), activityPrice.allowedMethods())
+app.use(cost.routes(), cost.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
