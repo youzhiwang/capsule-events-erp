@@ -1,10 +1,13 @@
 const Koa = require('koa')
-const app = new Koa()
 const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
+const session = require('koa-session')
 
+const sessionConfig = require('./session/config')
+
+// routes
 const users = require('./routes/users')
 const brand = require('./routes/brand')
 const subclass = require('./routes/subclass')
@@ -12,6 +15,7 @@ const commodity = require('./routes/commodity')
 const activityPrice = require('./routes/activityPrice')
 const cost = require('./routes/cost')
 
+const app = new Koa()
 // error handler
 onerror(app)
 
@@ -22,6 +26,24 @@ app.use(logger())
 
 app.use(require('koa-static')(__dirname + '/public'))
 
+app.keys = ['capsule events']
+
+app.use(session(sessionConfig, app))
+
+app.use(async (ctx, next) => {
+  if (ctx.path === '/login' || ctx.path === '/logout') await next()
+  else {
+    // 如果已经登录
+    if (ctx.session.loginStatus) await next()
+    else {
+      ctx.body = {
+        code: 'fail',
+        data: '',
+        message: '未登录，请先登录'
+      }
+    }
+  }
+})
 
 // logger
 app.use(async (ctx, next) => {

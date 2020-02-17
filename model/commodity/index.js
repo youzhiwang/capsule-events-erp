@@ -39,7 +39,6 @@ const queryCommodityByConditionsAndPage = (params, limit, offset) => {
       if (err) reject(err)
       else {
         con.query(sql, values, (err, rows) => {
-          console.log(rows)
           if (err) reject(err)
           else resolve(rows)
         })

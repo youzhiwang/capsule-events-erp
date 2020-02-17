@@ -5,6 +5,7 @@ router.post('/login', async (ctx, next) => {
   const params = ctx.request.body
   try{
     const res = await userService.checkUserIsExist(params)
+    ctx.session.loginStatus = true
     ctx.body = {
       code: 'success',
       data: res,
@@ -16,6 +17,15 @@ router.post('/login', async (ctx, next) => {
       data: '',
       message: e
     }
+  }
+})
+
+router.get('/logout', async (ctx, next) => {
+  delete ctx.session.loginStatus
+  ctx.body = {
+    code: 'success',
+    data: '',
+    message: '登出成功'
   }
 })
 
