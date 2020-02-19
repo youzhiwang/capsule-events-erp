@@ -13,6 +13,32 @@ const checkUserIsExist = (params) => {
   })
 }
 
+const modifyPassword = (params, userId) => {
+  return new Promise(async (resolve, reject) => {
+    const password = params.password
+    try {
+      const rows = await usersModel.modifyPassword(password, userId)
+      resolve(rows)
+    } catch (e) {
+      reject(e)
+    }
+  })
+}
+
+const modifyNickname = (params, userId) => {
+  return new Promise(async (resolve, reject) => {
+    const nickname = params.password
+    try {
+      const rows = await usersModel.modifyNickname(nickname, userId)
+      resolve(rows)
+    } catch (e) {
+      reject(e)
+    }
+  })
+}
+
 module.exports = {
-  checkUserIsExist
+  checkUserIsExist,
+  modifyPassword,
+  modifyNickname
 }

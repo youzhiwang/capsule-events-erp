@@ -4,11 +4,12 @@ const userService = require('../service/users/index')
 router.post('/login', async (ctx, next) => {
   const params = ctx.request.body
   try{
-    const res = await userService.checkUserIsExist(params)
+    const data = await userService.checkUserIsExist(params)
     ctx.session.loginStatus = true
+    ctx.session.userId = data.id
     ctx.body = {
       code: 'success',
-      data: res,
+      data,
       message: '登录成功'
     }
   } catch (e) {
@@ -22,6 +23,7 @@ router.post('/login', async (ctx, next) => {
 
 router.get('/logout', async (ctx, next) => {
   delete ctx.session.loginStatus
+  delete ctx.session.userId
   ctx.body = {
     code: 'success',
     data: '',
@@ -29,8 +31,42 @@ router.get('/logout', async (ctx, next) => {
   }
 })
 
-router.get('/bar', function (ctx, next) {
-  ctx.body = 'this is a users/bar response'
+router.put('/users-password', async (ctx, next) => {
+  const params = ctx.request.body
+  const userId = ctx.session.userId
+  try {
+    await userService.modifyPassword(params, userId)
+    ctx.body = {
+      code: 'success',
+      data: '',
+      message: ''
+    }
+  } catch (e) {
+    ctx.body = {
+      code: 'fail',
+      data: '',
+      message: ''
+    }
+  }
+})
+
+router.put('/users-nickname', async (ctx, next) => {
+  const params = ctx.request.body
+  const userId = ctx.session.userId
+  try {
+    await userService.modifyPassword(params, userId)
+    ctx.body = {
+      code: 'success',
+      data: '',
+      message: ''
+    }
+  } catch (e) {
+    ctx.body = {
+      code: 'fail',
+      data: '',
+      message: ''
+    }
+  }
 })
 
 module.exports = router
