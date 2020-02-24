@@ -37,8 +37,23 @@ const modifyNickname = (params, userId) => {
   })
 }
 
+const queryAllUsers = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const result = await usersModel.queryAllUsers()
+      result.forEach(item => {
+        delete item.password
+      })
+      resolve(result)
+    } catch (e) {
+      reject(e)
+    }
+  })
+}
+
 module.exports = {
   checkUserIsExist,
   modifyPassword,
-  modifyNickname
+  modifyNickname,
+  queryAllUsers
 }

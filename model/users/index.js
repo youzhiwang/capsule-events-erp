@@ -52,8 +52,43 @@ const modifyNickname = (nickname, id) => {
   })
 }
 
+const queryUserNicknameById = (userId) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT `nickname` FROM users WHERE `id`=?;'
+    const values = [userId]
+    pool.getConnection((err, connection) => {
+      if (err) reject(err)
+      else {
+        connection.query(sql, values, (err, rows) => {
+          if (err) reject(err)
+          resolve(rows)
+        })
+      }
+      connection.release()
+    })
+  })
+}
+
+const queryAllUsers = () => {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT * FROM users;'
+    pool.getConnection((err, connection) => {
+      if (err) reject(err)
+      else {
+        connection.query(sql, (err, rows) => {
+          if (err) reject(err)
+          resolve(rows)
+        })
+      }
+      connection.release()
+    })
+  })
+}
+
 module.exports = {
   queryUser,
   modifyPassword,
-  modifyNickname
+  modifyNickname,
+  queryUserNicknameById,
+  queryAllUsers
 }

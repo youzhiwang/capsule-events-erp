@@ -102,11 +102,29 @@ const querySubclassByBrandId = (brandId) => {
   })
 }
 
+const querySubclassNameById = (subclassId) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT `subclass_name` FROM `subclass` WHERE `id`=?;'
+    const values = [subclassId]
+    pool.getConnection((err, con) => {
+      if (err) reject(err)
+      else {
+        con.query(sql, values, (err, rows) => {
+          if (err) reject(err)
+          else resolve(rows)
+        })
+      }
+      con.release()
+    })
+  })
+}
+
 module.exports = {
   querySubclassByBrandIdAndPage,
   queryCountByBrandId,
   insertSubclass,
   modifySubclassById,
   deleteSubclassById,
-  querySubclassByBrandId
+  querySubclassByBrandId,
+  querySubclassNameById
 }

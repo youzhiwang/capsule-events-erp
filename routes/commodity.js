@@ -65,4 +65,22 @@ router.del('/commodity/:id', async (ctx, next) => {
   }
 })
 
+router.get('/commodity-dic', async (ctx, next) => {
+  const params = ctx.request.query
+  try {
+    const data = await commodityService.queryAllCommodity(params)
+    ctx.body = {
+      code: 'success',
+      data,
+      message: ''
+    }
+  } catch (e) {
+    ctx.body = {
+      code: 'fail',
+      body: '',
+      message: e
+    }
+  }
+})
+
 module.exports = router

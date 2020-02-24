@@ -3,7 +3,7 @@ const userService = require('../service/users/index')
 
 router.post('/login', async (ctx, next) => {
   const params = ctx.request.body
-  try{
+  try {
     const data = await userService.checkUserIsExist(params)
     ctx.session.loginStatus = true
     ctx.session.userId = data.id
@@ -65,6 +65,23 @@ router.put('/users-nickname', async (ctx, next) => {
       code: 'fail',
       data: '',
       message: ''
+    }
+  }
+})
+
+router.get('/users-dic', async (ctx, next) => {
+  try {
+    const data = await userService.queryAllUsers()
+    ctx.body = {
+      code: 'success',
+      data,
+      message: ''
+    }
+  } catch (e) {
+    ctx.body = {
+      code: 'fail',
+      data: '',
+      message: e
     }
   }
 })

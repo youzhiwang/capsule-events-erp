@@ -129,11 +129,83 @@ const queryCommodityById = (id) => {
   })
 }
 
+const queryAllCommodity = (brandId, subclassId) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT * FROM commodity WHERE `brand_id`=? AND `subclass_id`=?;'
+    const values = [brandId, subclassId]
+    pool.getConnection((err, con) => {
+      if (err) reject(err)
+      else {
+        con.query(sql, values, (err, rows) => {
+          if (err) reject(err)
+          else resolve(rows)
+        })
+      }
+      con.release()
+    })
+  })
+}
+
+const queryCommodityNameById = (commodityId) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT `commodity_name` FROM commodity WHERE `id`=?;'
+    const values = [commodityId]
+    pool.getConnection((err, con) => {
+      if (err) reject(err)
+      else {
+        con.query(sql, values, (err, rows) => {
+          if (err) reject(err)
+          else resolve(rows)
+        })
+      }
+      con.release()
+    })
+  })
+}
+
+const queryAmountById = (id) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT `amount` FROM commodity WHERE `id`=?;'
+    const values = [id]
+    pool.getConnection((err, con) => {
+      if (err) reject(err)
+      else {
+        con.query(sql, values, (err, rows) => {
+          if (err) reject(err)
+          else resolve(rows)
+        })
+      }
+      con.release()
+    })
+  })
+}
+
+const modifyAmountById = (amount, id) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'UPDATE commodity SET `amount`=? WHERE `id`=?;'
+    const values = [amount, id]
+    pool.getConnection((err, con) => {
+      if (err) reject(err)
+      else {
+        con.query(sql, values, (err, rows) => {
+          if (err) reject(err)
+          else resolve(rows)
+        })
+      }
+      con.release()
+    })
+  })
+}
+
 module.exports = {
   addCommodity,
   queryCommodityByConditionsAndPage,
   queryCountByConditions,
   modifyCommodityById,
   deleteCommodityById,
-  queryCommodityById
+  queryCommodityById,
+  queryAllCommodity,
+  queryCommodityNameById,
+  queryAmountById,
+  modifyAmountById
 }

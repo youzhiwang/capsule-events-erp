@@ -14,6 +14,8 @@ const subclass = require('./routes/subclass')
 const commodity = require('./routes/commodity')
 const activityPrice = require('./routes/activityPrice')
 const cost = require('./routes/cost')
+const storageIn = require('./routes/storageIn')
+const storageOut = require('./routes/storageOut')
 
 const app = new Koa()
 // error handler
@@ -60,6 +62,8 @@ app.use(subclass.routes(), subclass.allowedMethods())
 app.use(commodity.routes(), commodity.allowedMethods())
 app.use(activityPrice.routes(), activityPrice.allowedMethods())
 app.use(cost.routes(), cost.allowedMethods())
+app.use(storageIn.routes(), storageIn.allowedMethods())
+app.use(storageOut.routes(), storageOut.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {

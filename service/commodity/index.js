@@ -54,9 +54,21 @@ const deleteCommodityById = (id) => {
   })
 }
 
+const queryAllCommodity = (params) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const result = await commodityModel.queryAllCommodity(params.brandId, params.subclassId)
+      resolve(result)
+    } catch (e) {
+      reject(e)
+    }
+  })
+}
+
 module.exports = {
   addCommodity,
   queryCommodityByConditionsAndPage,
   modifyCommodityById,
-  deleteCommodityById
+  deleteCommodityById,
+  queryAllCommodity
 }

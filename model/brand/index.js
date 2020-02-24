@@ -100,11 +100,29 @@ const queryAllBrand = () => {
   })
 }
 
+const queryBrandNameById = (brandId) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT `brand_name` FROM brand WHERE `id`=?;'
+    const values = [brandId]
+    pool.getConnection((err, con) => {
+      if (err) reject(err)
+      else {
+        con.query(sql, values, (err, rows) => {
+          if (err) reject(err)
+          else resolve(rows)
+        })
+      }
+      con.release()
+    })
+  })
+}
+
 module.exports = {
   queryBrandByPage,
   queryBrandCount,
   insertBrand,
   updateBrandById,
   deleteBrandById,
-  queryAllBrand
+  queryAllBrand,
+  queryBrandNameById
 }
