@@ -25,7 +25,6 @@ const queryCostListByPage = params => {
       const listResult = await costModel.queryCostListByPage(purchaseGoods, limit, offset)
       const totalResult = await costModel.queryCountByPurchaseGoods(purchaseGoods)
       listResult.forEach(item => {
-        item.purchase_time = moment(item.purchase_time).format('YYYY-MM-DD')
         item.purchase_price = Number(item.purchase_price).toFixed(2)
       })
       resolve({

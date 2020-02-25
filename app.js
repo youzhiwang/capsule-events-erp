@@ -16,6 +16,8 @@ const activityPrice = require('./routes/activityPrice')
 const cost = require('./routes/cost')
 const storageIn = require('./routes/storageIn')
 const storageOut = require('./routes/storageOut')
+const remainingQuery = require('./routes/remainingQuery')
+const modifyRemainingNumberLog = require('./routes/modifyRemainingNumberLog')
 
 const app = new Koa()
 // error handler
@@ -64,6 +66,8 @@ app.use(activityPrice.routes(), activityPrice.allowedMethods())
 app.use(cost.routes(), cost.allowedMethods())
 app.use(storageIn.routes(), storageIn.allowedMethods())
 app.use(storageOut.routes(), storageOut.allowedMethods())
+app.use(remainingQuery.routes(), remainingQuery.allowedMethods())
+app.use(modifyRemainingNumberLog.routes(), modifyRemainingNumberLog.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {

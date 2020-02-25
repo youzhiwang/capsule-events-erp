@@ -27,11 +27,6 @@ const queryAllActivityPriceByCommodityId = (commodityId) => {
   return new Promise(async (resolve, reject) => {
     try {
       const result = await activityPriceModel.queryAllActivityPriceByCommodityId(commodityId)
-      result.forEach(item => {
-        item.start_time = moment(item.start_time).format('YYYY-MM-DD')
-        item.end_time = moment(item.end_time).format('YYYY-MM-DD')
-        item.create_time = moment(item.create_time).format('YYYY-MM-DD')
-      })
       resolve(result)
     } catch (e) {
       reject(e)
