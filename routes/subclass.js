@@ -1,22 +1,15 @@
 const router = require('koa-router')()
 const subclassService = require('../service/subclass/index')
+const commonResult = require('./utils/commonResult')
 
 router.get('/subclass-list/:brandId', async (ctx, next) => {
   const brandId = ctx.params.brandId
   const params = ctx.request.query
   try {
     const data = await subclassService.querySubclassByBrandIdAndPage(brandId, params)
-    ctx.body = {
-      code: 'success',
-      data: data,
-      message: ''
-    }
+    commonResult.success(ctx, data)
   } catch (e) {
-    ctx.body = {
-      code: 'fail',
-      data: '',
-      message: '获取失败'
-    }
+    commonResult.fail(ctx, e)
   }
 })
 
@@ -24,19 +17,10 @@ router.post('/subclass', async (ctx, next) => {
   const params = ctx.request.body
   try {
     const data = await subclassService.insertSubclass(params)
-    ctx.body = {
-      code: 'success',
-      data: data,
-      message: ''
-    }
+    commonResult.success(ctx, data)
   } catch (e) {
-    const result = {
-      code: 'fail',
-      data: '',
-      message: e
-    }
-    if (e.code === 'ER_DUP_ENTRY') result.message = '子类名称重复'
-    ctx.body = result
+    if (e.code === 'ER_DUP_ENTRY') e = '子类名称重复'
+    commonResult.fail(ctx, e)
   }
 })
 
@@ -44,19 +28,10 @@ router.put('/subclass', async (ctx, next) => {
   const params = ctx.request.body
   try {
     const data = await subclassService.modifySubclassById(params)
-    ctx.body = {
-      code: 'success',
-      data: data,
-      message: ''
-    }
+    commonResult.success(ctx, data)
   } catch (e) {
-    const result = {
-      code: 'fail',
-      data: '',
-      message: e
-    }
-    if (e.code === 'ER_DUP_ENTRY') result.message = '子类名称重复'
-    ctx.body = result
+    if (e.code === 'ER_DUP_ENTRY') e = '子类名称重复'
+    commonResult.fail(ctx, e)
   }
 })
 
@@ -64,17 +39,9 @@ router.del('/subclass/:id', async (ctx, next) => {
   const id = ctx.params.id
   try {
     await subclassService.deleteSubclassById(id)
-    ctx.body = {
-      code: 'success',
-      data: '',
-      message: ''
-    }
+    commonResult.success(ctx)
   } catch (e) {
-    ctx.body = {
-      code: 'fail',
-      data: '',
-      message: e
-    }
+    commonResult.fail(ctx, e)
   }
 })
 
@@ -82,17 +49,9 @@ router.get('/subclass-dic', async (ctx, next) => {
   const params = ctx.request.query
   try {
     const data = await subclassService.querySubclassByBrandId(params.brandId)
-    ctx.body = {
-      code: 'success',
-      data,
-      message: ''
-    }
+    commonResult.success(ctx, data)
   } catch (e) {
-    ctx.body = {
-      code: 'fail',
-      data: '',
-      message: e
-    }
+    commonResult.fail(ctx, e)
   }
 })
 

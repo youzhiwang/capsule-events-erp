@@ -1,5 +1,6 @@
 const router = require('koa-router')()
 const storageOutService = require('../service/storageOut/index')
+const commonResult = require('./utils/commonResult')
 
 // 新增出库记录
 router.post('/storage-out', async (ctx, next) => {
@@ -7,17 +8,9 @@ router.post('/storage-out', async (ctx, next) => {
   const userId = ctx.session.userId
   try {
     const data = await storageOutService.insertStorageOut(params, userId)
-    ctx.body = {
-      code: 'success',
-      data,
-      message: ''
-    }
+    commonResult.success(ctx, data)
   } catch (e) {
-    ctx.body = {
-      code: 'fail',
-      data: '',
-      message: e.message
-    }
+    commonResult.fail(ctx, e)
   }
 })
 
@@ -26,17 +19,9 @@ router.get('/storage-out', async (ctx, next) => {
   const params = ctx.request.query
   try {
     const data = await storageOutService.queryStorageOutRecordByPageAndConditions(params)
-    ctx.body = {
-      code: 'success',
-      data,
-      message: ''
-    }
+    commonResult.success(ctx, data)
   } catch (e) {
-    ctx.body = {
-      code: 'fail',
-      data: '',
-      message: e
-    }
+    commonResult.fail(ctx, e)
   }
 })
 

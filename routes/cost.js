@@ -1,21 +1,14 @@
 const router = require('koa-router')()
 const costService = require('../service/cost/index')
+const commonResult = require('./utils/commonResult')
 
 router.post('/cost', async (ctx, next) => {
   const params = ctx.request.body
   try {
     const data = await costService.insertCost(params)
-    ctx.body = {
-      code: 'success',
-      data,
-      message: ''
-    }
+    commonResult.success(ctx, data)
   } catch (e) {
-    ctx.body = {
-      code: 'fail',
-      data: '',
-      message: e
-    }
+    commonResult.fail(ctx, e)
   }
 })
 
@@ -23,17 +16,9 @@ router.get('/cost-list', async (ctx, next) => {
   const params = ctx.request.query
   try {
     const data = await costService.queryCostListByPage(params)
-    ctx.body = {
-      code: 'success',
-      data,
-      message: ''
-    }
+    commonResult.success(ctx, data)
   } catch (e) {
-    ctx.body = {
-      code: 'fail',
-      data: '',
-      message: e
-    }
+    commonResult.fail(ctx, e)
   }
 })
 
@@ -41,17 +26,9 @@ router.put('/cost', async (ctx, next) => {
   const params = ctx.request.body
   try {
     await costService.updateCostById(params)
-    ctx.body = {
-      code: 'success',
-      data: '',
-      message: ''
-    }
+    commonResult.success(ctx)
   } catch (e) {
-    ctx.body = {
-      code: 'fail',
-      data: '',
-      message: e
-    }
+    commonResult.fail(ctx, e)
   }
 })
 
@@ -59,17 +36,9 @@ router.del('/cost/:id', async (ctx, next) => {
   const id = ctx.params.id
   try {
     await costService.deleteCostById(id)
-    ctx.body = {
-      code: 'success',
-      data: '',
-      message: ''
-    }
+    commonResult.success(ctx)
   } catch (e) {
-    ctx.body = {
-      code: 'fail',
-      data: '',
-      message: e
-    }
+    commonResult.fail(ctx, e)
   }
 })
 

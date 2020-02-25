@@ -1,5 +1,6 @@
 const router = require('koa-router')()
 const userService = require('../service/users/index')
+const commonResult = require('./utils/commonResult')
 
 router.post('/login', async (ctx, next) => {
   const params = ctx.request.body
@@ -7,28 +8,16 @@ router.post('/login', async (ctx, next) => {
     const data = await userService.checkUserIsExist(params)
     ctx.session.loginStatus = true
     ctx.session.userId = data.id
-    ctx.body = {
-      code: 'success',
-      data,
-      message: '登录成功'
-    }
+    commonResult.success(ctx, data, '登录成功')
   } catch (e) {
-    ctx.body = {
-      code: 'fail',
-      data: '',
-      message: e
-    }
+    commonResult.fail(ctx, e)
   }
 })
 
 router.get('/logout', async (ctx, next) => {
   delete ctx.session.loginStatus
   delete ctx.session.userId
-  ctx.body = {
-    code: 'success',
-    data: '',
-    message: '登出成功'
-  }
+  commonResult.success(ctx, '', '登出成功')
 })
 
 router.put('/users-password', async (ctx, next) => {
@@ -36,17 +25,9 @@ router.put('/users-password', async (ctx, next) => {
   const userId = ctx.session.userId
   try {
     await userService.modifyPassword(params, userId)
-    ctx.body = {
-      code: 'success',
-      data: '',
-      message: ''
-    }
+    commonResult.success(ctx)
   } catch (e) {
-    ctx.body = {
-      code: 'fail',
-      data: '',
-      message: ''
-    }
+    commonResult.fail(ctx, e)
   }
 })
 
@@ -55,34 +36,18 @@ router.put('/users-nickname', async (ctx, next) => {
   const userId = ctx.session.userId
   try {
     await userService.modifyPassword(params, userId)
-    ctx.body = {
-      code: 'success',
-      data: '',
-      message: ''
-    }
+    commonResult.success(ctx)
   } catch (e) {
-    ctx.body = {
-      code: 'fail',
-      data: '',
-      message: ''
-    }
+    commonResult.fail(ctx, e)
   }
 })
 
 router.get('/users-dic', async (ctx, next) => {
   try {
     const data = await userService.queryAllUsers()
-    ctx.body = {
-      code: 'success',
-      data,
-      message: ''
-    }
+    commonResult.success(ctx, data)
   } catch (e) {
-    ctx.body = {
-      code: 'fail',
-      data: '',
-      message: e
-    }
+    commonResult.fail(ctx, e)
   }
 })
 

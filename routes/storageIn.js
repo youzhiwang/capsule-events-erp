@@ -1,22 +1,15 @@
 const router = require('koa-router')()
 const storageInService = require('../service/storageIn/index')
+const commonResult = require('./utils/commonResult')
 
 router.post('/storage-in', async (ctx, next) => {
   const params = ctx.request.body
   const userId = ctx.session.userId
   try {
     const data = await storageInService.insertStorageIn(params, userId)
-    ctx.body = {
-      code: 'success',
-      data,
-      message: ''
-    }
+    commonResult.success(ctx, data)
   } catch (e) {
-    ctx.body = {
-      code: 'fail',
-      data: '',
-      message: e
-    }
+    commonResult.fail(ctx, e)
   }
 })
 
@@ -24,17 +17,9 @@ router.get('/storage-in', async (ctx, next) => {
   const params = ctx.request.query
   try {
     const data = await storageInService.queryStorageInRecordByPageAndConditions(params)
-    ctx.body = {
-      code: 'success',
-      data,
-      message: ''
-    }
+    commonResult.success(ctx, data)
   } catch (e) {
-    ctx.body = {
-      code: 'fail',
-      data: '',
-      message: e
-    }
+    commonResult.fail(ctx, e)
   }
 })
 

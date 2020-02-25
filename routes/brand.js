@@ -1,39 +1,24 @@
 const router = require('koa-router')()
 const brandService = require('../service/brand/index')
+const commonResult = require('./utils/commonResult')
 
 router.get('/brand-list', async (ctx, next) => {
   const params = ctx.request.query
   try {
     const data = await brandService.getBrandListByPage(params)
-    ctx.body = {
-      code: 'success',
-      data: data,
-      message: ''
-    }
+    commonResult.success(ctx, data)
   } catch (e) {
-    ctx.body = {
-      code: 'fail',
-      data: '',
-      message: e
-    }
+    commonResult.fail(ctx, e)
   }
 })
 
 router.post('/brand', async (ctx, next) => {
   const params = ctx.request.body
-  try{
+  try {
     const id = await brandService.insertBrand(params)
-    ctx.body = {
-      code: 'success',
-      data: id,
-      message: '新建成功'
-    }
+    commonResult.success(ctx, id)
   } catch (e) {
-    ctx.body = {
-      code: 'fail',
-      data: '',
-      message: e
-    }
+    commonResult.fail(ctx, e)
   }
 })
 
@@ -41,17 +26,9 @@ router.put('/brand', async (ctx, next) => {
   const params = ctx.request.body
   try {
     await brandService.updateBrandById(params)
-    ctx.body = {
-      code: 'success',
-      data: params.id,
-      message: ''
-    }
+    commonResult.success(ctx, params.id)
   } catch (e) {
-    ctx.body  = {
-      code: 'fail',
-      data: '',
-      message: e
-    }
+    commonResult.fail(ctx, e)
   }
 })
 
@@ -59,34 +36,18 @@ router.del('/brand/:id', async (ctx, next) => {
   const id = ctx.params.id
   try {
     await brandService.deleteBrandById(id)
-    ctx.body = {
-      code: 'success',
-      data: '',
-      message: ''
-    }
+    commonResult.success(ctx)
   } catch (e) {
-    ctx.body = {
-      code: 'fail',
-      data: '',
-      message: e
-    }
+    commonResult.fail(ctx, e)
   }
 })
 
 router.get('/brand-dic', async (ctx, next) => {
-  try{
+  try {
     const data = await brandService.queryAllBrand()
-    ctx.body = {
-      code: 'success',
-      data,
-      message: ''
-    }
-  }catch (e) {
-    ctx.body = {
-      code: 'fail',
-      data: '',
-      message: e
-    }
+    commonResult.success(ctx, data)
+  } catch (e) {
+    commonResult.fail(ctx, e)
   }
 })
 
