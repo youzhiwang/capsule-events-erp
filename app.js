@@ -4,6 +4,9 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const session = require('koa-session')
+const jwt = require('jsonwebtoken')
+const jwtConfig = require('./jwtConfig/index')
+const commonResult = require('./routes/utils/commonResult')
 
 const sessionConfig = require('./session/config')
 
@@ -35,17 +38,32 @@ app.keys = ['capsule events']
 app.use(session(sessionConfig, app))
 
 app.use(async (ctx, next) => {
-  if (ctx.path === '/login' || ctx.path === '/logout') await next()
-  else {
-    // 如果已经登录
-    if (ctx.session.loginStatus) await next()
-    else {
-      ctx.body = {
-        code: 'fail',
-        data: '',
-        message: '未登录，请先登录'
+  // 判断登录的设备是否为移动端
+  // 如果 device 为 mobile 则走 jwt
+  // 如果 device 不是 mobile 则走 session
+  const device = ctx.request.headers.device
+  switch (device) {
+    // jwt
+    case 'mobile':
+      if (ctx.path !== '/login') {
+        const token = ctx.request.headers.token
+        await jwt.verify(token, jwtConfig.secret, async (err, decode) => {
+          if (err) commonResult.fail(ctx, err.message)
+          else {
+            await next()
+          }
+        })
+      } else await next()
+      break
+    // session
+    default:
+      if (ctx.path === '/login' || ctx.path === '/logout') await next()
+      else {
+        // 如果已经登录
+        if (ctx.session.loginStatus) await next()
+        else commonResult.fail(ctx, '未登录，请先登录')
       }
-    }
+      break
   }
 })
 

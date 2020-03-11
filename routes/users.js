@@ -1,13 +1,19 @@
 const router = require('koa-router')()
 const userService = require('../service/users/index')
 const commonResult = require('./utils/commonResult')
+const jwt = require('jsonwebtoken')
+const jwtConfig = require('../jwtConfig/index')
 
 router.post('/login', async (ctx, next) => {
+  const device = ctx.request.headers.device
   const params = ctx.request.body
   try {
     const data = await userService.checkUserIsExist(params)
     ctx.session.loginStatus = true
     ctx.session.userId = data.id
+    if (device === 'mobile') {
+      data.token = await jwt.sign(Object.assign({}, data), jwtConfig.secret, {expiresIn : '10d'})
+    }
     commonResult.success(ctx, data, '登录成功')
   } catch (e) {
     commonResult.fail(ctx, e)
